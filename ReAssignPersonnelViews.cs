@@ -93,24 +93,10 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
 
         private void ReAssignPersonnelViews_ConnectionUpdated(object sender, ConnectionUpdatedEventArgs e)
         {
-            //var orgver = new Version(e.ConnectionDetail.OrganizationVersion);
-            //var orgok = orgver >= new Version(9, 0);
-
-
-            //LoadUsers();
             LoadUsersAndTeams();
-
         }
 
-        private void TransferViewToNewUser(string viewId, UserTeamProxy userTeamProxy)
-        {
-            var assignRequest = new AssignRequest { Target = new EntityReference("userquery", new Guid(viewId)) };
-            assignRequest.Assignee = userTeamProxy.UserOrTeamEntity.ToEntityReference();
-            
-            var assignResponse = (AssignResponse)Service.Execute(assignRequest);
-
-        }
-
+        
         /// <summary>
         /// This event occurs when the plugin is closed
         /// </summary>
@@ -122,24 +108,30 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             // Before leaving, save the settings
             SettingsManager.Instance.Save(GetType(), _mySettings);
         }
-
-
-
+        
         #endregion XrmToolBox Plug In Methods
         
         #region Control Events
 
         private void cmbSourceUsers_SelectedIndexChanged(object sender, EventArgs e)
         {
-                LoadViews();
+          LoadViews();
         }
 
+        private void tslAbout_Click(object sender, EventArgs e)
+        {
+            Process.Start(HelpUrl);
+        }
+
+        private void btnTransferViews_Click(object sender, EventArgs e)
+        {
+            TransferViews();
+        }
         
 
-     
 
         #endregion Control Events
-        
+
         #region Private Helper Methods
 
         //private void LoadUsers()
@@ -153,7 +145,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
         //            qx.ColumnSet.AddColumns("fullname", "systemuserid");
         //            qx.AddOrder("fullname", OrderType.Ascending);
         //            qx.Criteria.AddCondition("isdisabled", ConditionOperator.Equal, false);
-                    
+
         //            eventargs.Result = Service.RetrieveMultiple(qx);
         //        })
         //    {
@@ -173,7 +165,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
         //                    cmbSourceUsers.Enabled = true;
         //                }
         //            }
-                    
+
         //        }
         //    });
         //}
@@ -392,34 +384,28 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
 
         #endregion Logging And ProgressBar Methods
         
-    
-
         #region Interface Members
 
         public string RepositoryName => "ReAssignPersonnelViews";
 
         public string UserName => "contactmayankp";
         
-        public string DonationDescription => "Auto Number Updater";
+        public string DonationDescription => "Re-Assign Personnel Views";
         public string EmailAccount => "mayank.pujara@gmail.com";
 
-        public string HelpUrl => "https://mayankp.wordpress.com/2021/12/09/xrmtoolbox-ReAssignPersonnelViews-new-tool/";
-
-
-        #endregion
+        public string HelpUrl => "https://mayankp.wordpress.com";
 
 
         public void ShowAboutDialog()
         {
-           // throw new NotImplementedException();
+            // throw new NotImplementedException();
         }
 
-        private void tslAbout_Click(object sender, EventArgs e)
-        {
-            Process.Start(HelpUrl);
-        }
+        #endregion
+        
+        #region Helper Methods
 
-        private void btnTransferViews_Click(object sender, EventArgs e)
+        private void TransferViews()
         {
             var userTeamProxy = cmbDestinationUsers.SelectedItem as UserTeamProxy;
             if (userTeamProxy == null)
@@ -427,43 +413,110 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
                 return;
             }
 
-            List<String> selectedViewList = GetSelectedViewIds();
-            
-            foreach (String strSelectedViewId in selectedViewList)
+            WorkAsync(new WorkAsyncInfo
             {
-                TransferViewToNewUser(strSelectedViewId, userTeamProxy);
-            }
-
-            //finally update user view to show refresh view list!
-            LoadViews();
-
-        }
-
-
-        private List<String> GetSelectedViewIds()
-        {
-            List<String> SelectViewIds = new List<String>();
-            String Id = String.Empty;
-
-            chlSourceViewList.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
-            {
-                //this.lblDescription.Text = "Processing file " + i.ToString() + " of " + iCount.ToString();
-                foreach (Object SelectItem in chlSourceViewList.CheckedItems)
+                Message = "Transferring Selected views to " + userTeamProxy.ToString(),
+                Work = (worker, args) =>
                 {
-                    //Id = SelectItem.Substring(SelectItem.LastIndexOf(" INTERNAL ID="));
-                    //Id = Id.Replace(" INTERNAL ID=", "");
-                    Id = ((UserViewProxy)SelectItem).Id.ToString();
 
-                    if (!String.IsNullOrEmpty(Id))
+                    var result = GetSelectedViews();
+                    args.Result = result;
+
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
                     {
-                        SelectViewIds.Add(Id);
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    var result = args.Result as List<UserViewProxy>;
+
+                    if (result != null && result.Count > 0)
+                    {
+                        
+                        LogTextBoxAndProgressBar.UpdateStatusMessage(StatusText, $"Found {result.Count} Views selected...");
+
+                        LogTextBoxAndProgressBar.SetProgressBar(progressBar, result.Count);
+
+
+                        TransferViewsToNewUser(userTeamProxy, result);
+                    }
+                    else
+                    {
+                        LogTextBoxAndProgressBar.UpdateStatusMessage(StatusText,
+                            $"No View(s) are selected, Please Selected views and then try again!");
                     }
                 }
+            });
+        }
+        
+        private void TransferViewsToNewUser(UserTeamProxy userTeamProxy, List<UserViewProxy> selectedViews)
+        {
+            
+            if (userTeamProxy == null)
+            {
+                return;
+            }
 
+            WorkAsync(new WorkAsyncInfo
+            {
+                Message = "Started Transferring Selected views to " + userTeamProxy.ToString(),
+                Work = (worker, args) =>
+                {
+                    foreach (var selectedView in selectedViews)
+                    {   
+                        UpdateStatusMessage($"Started Transfer View : {selectedView.Name} to new User/Team :{userTeamProxy.ToString()}..");
+
+                        try
+                        {
+                            var assignRequest = new AssignRequest
+                            {
+                                Target = new EntityReference("userquery", new Guid(selectedView.Id)),
+                                Assignee = userTeamProxy.UserOrTeamEntity.ToEntityReference()
+                            };
+                            
+                            var assignResponse = (AssignResponse)Service.Execute(assignRequest);
+                            
+                            UpdateStatusMessage($"Completed Transfer View : {selectedView.Name} to new User/Team :{userTeamProxy.ToString()} Records which are missing auto numbers..");
+                        }
+                        catch (Exception e)
+                        {
+                            UpdateStatusMessage($" an Error Occurred while Transferring View : {selectedView.Name} to new User/Team :{userTeamProxy.ToString()} .. Error: {e.Message}");
+                        }
+
+                        AddProgressStep();
+                    }
+
+                },
+                PostWorkCallBack = (args) =>
+                {
+                    if (args.Error != null)
+                    {
+                        MessageBox.Show(args.Error.ToString(), "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                    
+                    LoadViews();
+                }
+            });
+        }
+
+        private List<UserViewProxy> GetSelectedViews()
+        {
+            List<UserViewProxy> selectViews = new List<UserViewProxy>();
+            
+
+            chlSourceViewList.Invoke((System.Windows.Forms.MethodInvoker)delegate ()
+            {   
+                foreach (var selectItem in chlSourceViewList.CheckedItems)
+                {
+                    selectViews.Add((UserViewProxy)selectItem);
+                }
 
             });
 
-            return SelectViewIds;
+            return selectViews;
         }
+
+        #endregion Helper Methods
     }
 }

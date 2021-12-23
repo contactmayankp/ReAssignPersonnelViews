@@ -199,12 +199,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Helpers\AttributeProxy.cs" />
     <Compile Include="Helpers\UserTeamProxy.cs" />
     <Compile Include="Helpers\UserViewProxy.cs" />
     <Compile Include="Helpers\ErrorLog.cs" />
     <Compile Include="Helpers\LogTextBoxAndProgressBar.cs" />
-    <Compile Include="Helpers\MetadataHelper.cs" />
     <Compile Include="MyPlugin.cs" />
     <Compile Include="ReAssignPersonnelViews.cs">
       <SubType>UserControl</SubType>
@@ -219,7 +217,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Helpers\UserProxy.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -55,7 +55,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.toolStripMenu.Location = new System.Drawing.Point(0, 0);
             this.toolStripMenu.Name = "toolStripMenu";
             this.toolStripMenu.Padding = new System.Windows.Forms.Padding(0, 0, 5, 0);
-            this.toolStripMenu.Size = new System.Drawing.Size(2042, 52);
+            this.toolStripMenu.Size = new System.Drawing.Size(2192, 52);
             this.toolStripMenu.TabIndex = 4;
             this.toolStripMenu.Text = "toolStrip1";
             // 
@@ -64,7 +64,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.tslAbout.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.tslAbout.IsLink = true;
             this.tslAbout.Name = "tslAbout";
-            this.tslAbout.Size = new System.Drawing.Size(180, 45);
+            this.tslAbout.Size = new System.Drawing.Size(180, 55);
             this.tslAbout.Text = "by MayankP";
             this.tslAbout.Click += new System.EventHandler(this.tslAbout_Click);
             // 
@@ -72,14 +72,14 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             // 
             this.tsbClose.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
             this.tsbClose.Name = "tsbClose";
-            this.tsbClose.Size = new System.Drawing.Size(211, 45);
+            this.tsbClose.Size = new System.Drawing.Size(211, 55);
             this.tsbClose.Text = "Close this tool";
             this.tsbClose.Click += new System.EventHandler(this.tsbClose_Click);
             // 
             // tssSeparator1
             // 
             this.tssSeparator1.Name = "tssSeparator1";
-            this.tssSeparator1.Size = new System.Drawing.Size(6, 52);
+            this.tssSeparator1.Size = new System.Drawing.Size(6, 62);
             // 
             // progressBar
             // 
@@ -88,7 +88,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.progressBar.Location = new System.Drawing.Point(28, 842);
             this.progressBar.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.progressBar.Name = "progressBar";
-            this.progressBar.Size = new System.Drawing.Size(1979, 52);
+            this.progressBar.Size = new System.Drawing.Size(2129, 52);
             this.progressBar.TabIndex = 26;
             this.progressBar.Visible = false;
             // 
@@ -103,7 +103,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.StatusText.Name = "StatusText";
             this.StatusText.ReadOnly = true;
             this.StatusText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.StatusText.Size = new System.Drawing.Size(1987, 749);
+            this.StatusText.Size = new System.Drawing.Size(2137, 749);
             this.StatusText.TabIndex = 27;
             // 
             // cmbSourceUsers
@@ -134,7 +134,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.chlSourceViewList.Location = new System.Drawing.Point(28, 170);
             this.chlSourceViewList.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.chlSourceViewList.Name = "chlSourceViewList";
-            this.chlSourceViewList.Size = new System.Drawing.Size(1987, 564);
+            this.chlSourceViewList.Size = new System.Drawing.Size(2129, 564);
             this.chlSourceViewList.TabIndex = 38;
             // 
             // btnRetrieveViews
@@ -142,7 +142,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.btnRetrieveViews.Location = new System.Drawing.Point(1311, 89);
             this.btnRetrieveViews.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.btnRetrieveViews.Name = "btnRetrieveViews";
-            this.btnRetrieveViews.Size = new System.Drawing.Size(696, 55);
+            this.btnRetrieveViews.Size = new System.Drawing.Size(846, 55);
             this.btnRetrieveViews.TabIndex = 39;
             this.btnRetrieveViews.Text = "Refresh List of Views";
             this.btnRetrieveViews.UseVisualStyleBackColor = true;
@@ -173,7 +173,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.btnTransferViews.Location = new System.Drawing.Point(1322, 769);
             this.btnTransferViews.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.btnTransferViews.Name = "btnTransferViews";
-            this.btnTransferViews.Size = new System.Drawing.Size(693, 55);
+            this.btnTransferViews.Size = new System.Drawing.Size(835, 55);
             this.btnTransferViews.TabIndex = 42;
             this.btnTransferViews.Text = "Transfer Selected Views to Destination User Or Team";
             this.btnTransferViews.UseVisualStyleBackColor = true;
@@ -195,7 +195,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
             this.Controls.Add(this.toolStripMenu);
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.Name = "ReAssignPersonnelViews";
-            this.Size = new System.Drawing.Size(2042, 1677);
+            this.Size = new System.Drawing.Size(2192, 1677);
             this.ConnectionUpdated += new XrmToolBox.Extensibility.PluginControlBase.ConnectionUpdatedHandler(this.ReAssignPersonnelViews_ConnectionUpdated);
             this.Load += new System.EventHandler(this.ReAssignPersonnelViews_Load);
             this.toolStripMenu.ResumeLayout(false);
