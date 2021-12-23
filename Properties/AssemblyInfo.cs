@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("ReAssignPersonnelViews")]
-[assembly: AssemblyDescription("XrmToolBox plugin to update Auto Number values where records are missing auto number in Microsoft Dynamics 365")]
+[assembly: AssemblyDescription("XrmToolBox plugin to Re-Assign Personnel Views in Microsoft Dynamics 365")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("SDMSolutionsLimited")]
 [assembly: AssemblyProduct("ReAssignPersonnelViews")]
