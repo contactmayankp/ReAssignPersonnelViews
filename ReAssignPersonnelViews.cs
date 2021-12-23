@@ -393,7 +393,7 @@ namespace Sdmsols.XTB.ReAssignPersonnelViews
         public string DonationDescription => "Re-Assign Personnel Views";
         public string EmailAccount => "mayank.pujara@gmail.com";
 
-        public string HelpUrl => "https://mayankp.wordpress.com";
+        public string HelpUrl => "https://mayankp.wordpress.com/2021/12/23/xrmtoolbox-new-tool-reassignpersonnelviews/";
 
 
         public void ShowAboutDialog()
